@@ -1,5 +1,6 @@
 import numpy
 import matlab
+from texture_param import TextureParam
 
 
 def ml2np(x, dtype=None):
@@ -38,3 +39,7 @@ def np2ml(x, dtype=None):
     else:
 
         return mdtype(list(x))
+
+
+def conv_texture_param(param):
+    return TextureParam(param)

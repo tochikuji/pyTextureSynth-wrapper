@@ -7,4 +7,5 @@ obj = texturesynth.TextureSynth('../textureSynth', '~/src/matlabPyrTools')
 img = cv2.imread(sys.argv[1], 0)
 res = obj.analyze(img, 4, 4, 7)
 
-print res
+ims = obj.synthesis(res)
+print ims
