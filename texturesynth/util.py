@@ -2,6 +2,18 @@ import numpy
 import matlab
 
 
+fkeys = ['parentRealCorr',
+         'pixelStats',
+         'autoCorrReal',
+         'magMeans',
+         'autoCorrMag',
+         'cousinRealCorr',
+         'cousinMagCorr',
+         'parentMagCorr',
+         'pixelLPStats']
+         # 'varianceHPR']
+
+
 class TextureParam(object):
 
     def __init__(self, ml_param=None):
@@ -59,7 +71,7 @@ def np2ml(x, dtype=None):
         mdtype = matlab.mlarray.uint8
 
     else:
-        raise TypeError("Unsupported type conversion")
+        mdtype = matlab.mlarray.double
 
     if isinstance(x, numpy.ndarray):
 
@@ -71,3 +83,33 @@ def np2ml(x, dtype=None):
 
 def conv_texture_param(param):
     return TextureParam(param)
+
+
+def array2obj(arr, backend='matlab'):
+
+    shapes = [(8, 8, 4), (1, 6), (7, 7, 5), (18, 1), (7, 7, 4, 4), (8, 8, 5), (4, 4, 5), (4, 4, 4), (5, 2)]
+
+    ret = {}
+    index = 0
+
+    for s, k in zip(shapes, fkeys):
+        size = reduce(lambda x, y: x * y, s)
+
+        ret[k] = arr[index:index + size].reshape(*s)
+        index += size
+
+    ret['varianceHPR'] = arr[-1]
+
+    if backend == 'matlab':
+        for k in fkeys:
+            ret[k] = np2ml(ret[k])
+
+    return ret
+
+
+def obj2array(obj):
+
+    ret = numpy.hstack([ml2np(obj[k]).reshape(-1) for k in fkeys])
+    numpy.append(ret, obj['varianceHPR'])
+
+    return ret
