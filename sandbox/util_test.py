@@ -10,5 +10,5 @@ res = obj.analyze(img, 4, 4, 7)
 arr = texturesynth.util.obj2array(res)
 print arr, arr.shape
 
-obj = texturesynth.util.array2obj(arr)
+obj = texturesynth.util.array2obj(arr, backend='numpy')
 print obj, type(obj)

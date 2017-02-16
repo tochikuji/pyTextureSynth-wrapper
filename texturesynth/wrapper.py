@@ -12,7 +12,12 @@ from util import np2ml, ml2np
 
 class TextureSynth(object):
 
-    def __init__(self, libpath='./TextureSynth/', toolpath='./matlabPyrTools'):
+    def __init__(self, libpath, toolpath):
+        """
+        libpath: path to TextureSynth matlab library
+        toolpath: path to matlabPyrTools library
+        """
+
         # create matlab engine instance
         self.eng = matlab.engine.start_matlab()
 
@@ -38,15 +43,15 @@ class TextureSynth(object):
 
         return param
 
-    def synthesis(self, param, im0=None, N_iter=50, cmask=None, imask=None):
+    def synthesis(self, param, im0_size=None, N_iter=50, cmask=None, imask=None):
 
         # arguments for textureAnalysis
         args = [param]
 
-        if im0 is None:
-            im0 = [192, 128]
+        if im0_size is None:
+            im0_size = [192, 128]
 
-        args.append(matlab.mlarray.double(im0))
+        args.append(matlab.mlarray.double(im0_size))
 
         if not cmask is None:
             args.append(matlab.mlarray.double(cmask))
